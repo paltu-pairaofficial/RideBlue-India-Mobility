@@ -1,0 +1,28 @@
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import authRoutes from './routes/auth.routes.js';
+import bookingRoutes from './routes/booking.routes.js';
+import driverRoutes from './routes/driver.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+import supportRoutes from './routes/support.routes.js';
+const app = express();
+app.disable('x-powered-by');
+app.use(helmet());
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173' }));
+app.use(express.json({ limit: '100kb' }));
+app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 180, standardHeaders: 'draft-7', legacyHeaders: false }));
+app.get('/api/v1/health', (_req, res) => res.json({ status: 'ok', service: 'RideBlue API', timestamp: new Date().toISOString() }));
+app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/bookings', bookingRoutes);
+app.use('/api/v1/drivers', driverRoutes);
+app.use('/api/v1/admin', adminRoutes);
+app.use('/api/v1/support/tickets', supportRoutes);
+app.use((req, res) => res.status(404).json({ message: `Route not found: ${req.method} ${req.path}` }));
+app.use((err, _req, res, _next) => {
+  console.error(err);
+  const status = err.status || 500;
+  res.status(status).json({ message: status === 500 ? 'Unexpected server error.' : err.message });
+});
+export default app;

@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --color-brand-blue: #0798F2;
+  --color-brand-navy: #102A43;
+  --color-brand-cream: #FFF8E7;
+  --color-brand-yellow: #FFE600;
+  --color-brand-dark: #111111;
+  --color-brand-pale: #E5F4FF;
+  --color-brand-green: #16865C;
+}
+
+/* Base Font Enforcement */
+html, body, button, input, select, textarea {
+  font-family: var(--font-sans);
+}
+
+/* ========================================================
+   RideBlue Authoritative Typography System
+   Specification:
+   - Font family: Inter throughout the application
+   - Hero heading: 44px desktop, 32px mobile, font-weight 700
+   - Page heading: 30px desktop, responsive on smaller screens, font-weight 700
+   - Card heading: 22px desktop, responsive on smaller screens, font-weight 600
+   - Body text: 17px desktop, responsive on smaller screens, font-weight 400
+   - Form labels: 15px on desktop and mobile, font-weight 500
+   - Buttons: 15px on desktop and mobile, font-weight 600
+   - Helper text: 14px on desktop and mobile, font-weight 400
+   ======================================================== */
+
+.hero-heading {
+  font-size: 32px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+@media (min-width: 768px) {
+  .hero-heading {
+    font-size: 44px;
+    line-height: 1.15;
+  }
+}
+
+.page-heading {
+  font-size: 24px;
+  line-height: 1.25;
+  font-weight: 700;
+}
+@media (min-width: 768px) {
+  .page-heading {
+    font-size: 30px;
+    line-height: 1.25;
+  }
+}
+
+.card-heading {
+  font-size: 19px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+@media (min-width: 768px) {
+  .card-heading {
+    font-size: 22px;
+    line-height: 1.35;
+  }
+}
+
+.body-text {
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+@media (min-width: 768px) {
+  .body-text {
+    font-size: 17px;
+    line-height: 1.6;
+  }
+}
+
+.form-label {
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 500;
+}
+
+.btn-text,
+.button-text {
+  font-size: 15px;
+  line-height: 1.4;
+  font-weight: 600;
+}
+
+.helper-text {
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+/* Form controls & button base consistency */
+label.form-label,
+label:not([class*="text-"]):not([class*="text-["]) {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Leaflet map styles */
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  font-family: inherit;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ##RideBlue car moves from right to left## */
+/* .rideblue-moving-car {
+  animation: rideblue-drive 9s linear infinite;
+  will-change: transform;
+}
+
+@keyframes rideblue-drive {
+  from {
+    transform: translateX(100vw);
+  }
+
+  to {
+    transform: translateX(-120%);
+  }
+}
+
+/* Respect reduced-motion preferences */
+/* @media (prefers-reduced-motion: reduce) {
+  .rideblue-moving-car {
+    animation: none;
+    transform: translateX(0);
+  }
+}  */
+
+
+
+.rideblue-city-car {
+  animation: rideblue-city-drive 20s linear infinite alternate;
+  will-change: transform;
+}
+
+@keyframes rideblue-city-drive {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-20%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rideblue-city-car {
+    animation: none;
+  }
+}

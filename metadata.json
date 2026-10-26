@@ -1,0 +1,6 @@
+{
+  "name": "RideBlue — Cab Booking & Ride Management Platform",
+  "description": "RideBlue is a modern, responsive cab booking and ride management platform connecting Riders, Drivers, and Administrators across West Bengal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
