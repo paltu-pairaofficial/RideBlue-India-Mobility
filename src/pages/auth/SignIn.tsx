@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Lock, Mail, ArrowRight, ShieldCheck, UserCheck } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { isSupabaseConfigured } from '../../supabase/client';
 import { UserRole } from '../../types';
 
 export const SignIn: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -45,16 +47,21 @@ export const SignIn: React.FC = () => {
           </p>
         </div>
 
-        {/* Configuration Notice if Supabase is Missing */}
-        <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-1">
-          <div className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-amber-700" />
-            <span>Supabase Authentication Required</span>
+       
+        {/* Show warning only when Supabase is not configured */}
+        {!isSupabaseConfigured && (
+          <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl space-y-1">
+            <div className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-amber-700" />
+              <span>Supabase Authentication Required</span>
+            </div>
+            <p className="text-[11px] text-amber-800">
+              Sign-in requires valid Supabase credentials (
+              <code className="font-mono">VITE_SUPABASE_URL</code> and{' '}
+              <code className="font-mono">VITE_SUPABASE_ANON_KEY</code>).
+            </p>
           </div>
-          <p className="text-[11px] text-amber-800">
-            Simulated in-memory demo authentication is disabled. Sign-in requires valid Supabase credentials (<code className="font-mono">VITE_SUPABASE_URL</code> &amp; <code className="font-mono">VITE_SUPABASE_ANON_KEY</code>).
-          </p>
-        </div>
+        )}
 
         {/* Form */}
         <form onSubmit={handleSignIn} className="space-y-4">
