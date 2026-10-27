@@ -33,7 +33,8 @@ export const RiderManagement: React.FC = () => {
         token = sessionData.session?.access_token || '';
 
         // Query backend admin endpoint or profiles table
-        const res = await fetch('/api/admin/riders', {
+        const apiBase = ((import.meta as any).env?.VITE_API_BASE_URL || '').replace(/\/+$/, '');
+        const res = await fetch(`${apiBase}/api/admin/riders`, {
           headers: {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
