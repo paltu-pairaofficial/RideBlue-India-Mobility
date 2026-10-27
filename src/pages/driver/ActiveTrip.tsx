@@ -82,7 +82,14 @@ export const ActiveTrip: React.FC = () => {
         token = data.session?.access_token || '';
       }
 
-      const res = await fetch('/api/location/update', {
+
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '');
+
+      if (!apiBaseUrl) {
+        throw new Error('VITE_API_BASE_URL is not configured.');
+      }
+
+      const res = await fetch(`${apiBaseUrl}/api/location/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -98,6 +105,7 @@ export const ActiveTrip: React.FC = () => {
           capturedAt,
         }),
       });
+
 
       const resData = await res.json();
 
@@ -153,8 +161,8 @@ export const ActiveTrip: React.FC = () => {
         setTransmissionError(
           Number.isFinite(accuracy)
             ? `GPS accuracy is too poor (${Math.round(
-                accuracy
-              )}m) or coordinates are outside the supported area. Waiting for a valid location.`
+              accuracy
+            )}m) or coordinates are outside the supported area. Waiting for a valid location.`
             : 'GPS accuracy is unavailable. Waiting for a valid location.'
         );
         return;
@@ -231,8 +239,14 @@ export const ActiveTrip: React.FC = () => {
 
         if (!token || cancelled) return;
 
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '');
+
+        if (!apiBaseUrl) {
+          throw new Error('VITE_API_BASE_URL is not configured.');
+        }
+
         const response = await fetch(
-          `/api/location/ride/${encodeURIComponent(trip.id)}`,
+          `${apiBaseUrl}/api/location/ride/${encodeURIComponent(trip.id)}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -312,7 +326,7 @@ export const ActiveTrip: React.FC = () => {
   const route = getEstimatedRoute(trip.pickup, trip.destination);
   const statusCfg = getRideStatusConfig(trip.status);
 
-   const handleNextStatus = async () => {
+  const handleNextStatus = async () => {
     try {
       if (trip.status === 'accepted') {
         await updateRideStatus(trip.id, 'driver_arriving');
@@ -437,7 +451,7 @@ export const ActiveTrip: React.FC = () => {
               pickup={trip.pickup}
               destination={trip.destination}
               // Prefer valid server coordinates; otherwise use device GPS.
-            driverLocation={currentCoords || serverCoords || undefined}
+              driverLocation={currentCoords || serverCoords || undefined}
               routeCoordinates={route.coordinates}
               className="w-full h-full min-h-[400px] lg:min-h-[520px] rounded-2xl overflow-hidden"
             />
@@ -447,11 +461,10 @@ export const ActiveTrip: React.FC = () => {
           <div className="bg-white border border-slate-200 rounded-2xl p-3 text-xs flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <span
-                className={`w-2.5 h-2.5 rounded-full ${
-                  gpsPermission === 'granted'
-                    ? 'bg-emerald-500 animate-pulse'
-                    : 'bg-slate-300'
-                }`}
+                className={`w-2.5 h-2.5 rounded-full ${gpsPermission === 'granted'
+                  ? 'bg-emerald-500 animate-pulse'
+                  : 'bg-slate-300'
+                  }`}
               />
 
               <span className="font-bold text-slate-800">
