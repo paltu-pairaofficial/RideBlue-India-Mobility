@@ -106,6 +106,16 @@ import { supabase } from '../../supabase/client';
 
 
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '');
+
+const apiUrl = (path: string): string => {
+  if (!API_BASE_URL) {
+    throw new Error('VITE_API_BASE_URL is not configured.');
+  }
+
+  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+};
+
 export const LiveJourneyTracking: React.FC = () => {
 
 
@@ -320,23 +330,14 @@ export const LiveJourneyTracking: React.FC = () => {
 
 
 
-        const res = await fetch(`/api/location/ride/${booking.id}`, {
-
-
-
-          headers: {
-
-
-
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-
-
-
-          },
-
-
-
-        });
+        const res = await fetch(
+          apiUrl(`/api/location/ride/${encodeURIComponent(booking.id)}`),
+          {
+            headers: {
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+          }
+        );
 
 
 
@@ -737,7 +738,7 @@ export const LiveJourneyTracking: React.FC = () => {
 
 
 
-      const orderRes = await fetch('/api/payments/create-order', {
+      const orderRes = await fetch(apiUrl('/api/payments/create-order'), {
 
 
 
@@ -857,7 +858,7 @@ export const LiveJourneyTracking: React.FC = () => {
 
 
 
-            const verifyRes = await fetch('/api/payments/verify', {
+       const verifyRes = await fetch(apiUrl('/api/payments/verify'), {
 
 
 
