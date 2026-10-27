@@ -356,9 +356,16 @@ export const ActiveTrip: React.FC = () => {
           );
         }
 
+
         // Ask the backend to complete the ride.
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL?.replace(/\/+$/, '');
+
+        if (!apiBaseUrl) {
+          throw new Error('VITE_API_BASE_URL is not configured.');
+        }
+
         const response = await fetch(
-          `/api/rides/${encodeURIComponent(trip.id)}/complete`,
+          `${apiBaseUrl}/api/rides/${encodeURIComponent(trip.id)}/complete`,
           {
             method: 'POST',
             headers: {
@@ -367,6 +374,7 @@ export const ActiveTrip: React.FC = () => {
             },
           }
         );
+
 
         const result = await response.json().catch(() => ({}));
 
